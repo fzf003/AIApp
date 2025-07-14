@@ -8,15 +8,17 @@ using Microsoft.SemanticKernel.Agents;
 using Microsoft.SemanticKernel.ChatCompletion;
 using Microsoft.SemanticKernel.TextGeneration;
 using OpenAI;
+using OpenAI.Assistants;
 using SemanticKernelApp;
 using System.ClientModel;
 using System.Text;
 
 
-var qwenApiKey = "<key>"; // 替换为你的Qwen API Key
-var githubkey = "<key>";// 替换为你的Github API Key
+var qwenApiKey = "<key>";
+var githubkey = "<key>";
 var modelId = "qwen-plus";
 //var qwenEndpoint = "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions";
+List<string> keywords = new List<string> { "理财", "股票", "基金", "投资" };
 
 var qwenkernel = CreateQwenKernel();
 
@@ -39,6 +41,25 @@ CancellationTokenSource tokenSource = new CancellationTokenSource();
 //tokenSource.CancelAfter(TimeSpan.FromSeconds(40)); // 设置超时时间为30秒
 
 
+RenderedPromptCallbackHandler promptCallbackHandler = async (originalPrompt, cancellationToken) =>
+{
+
+    if (string.IsNullOrWhiteSpace(originalPrompt))
+    {
+        return string.Empty;
+    }
+
+
+
+
+
+    var result = await openkernel.InvokePromptAsync(originalPrompt, cancellationToken: cancellationToken);
+
+    return result.RenderedPrompt;
+};
+
+
+
 string agentprompt = string.Empty;
 
 while (true)
@@ -55,11 +76,11 @@ while (true)
     {
         KernelArguments arguments = new() { { "topic", "sea" } };
 
-        var result = await openkernel.InvokePromptAsync(agentprompt,cancellationToken: tokenSource.Token);
+        var resultpropmpt = await promptCallbackHandler(agentprompt, cancellationToken: tokenSource.Token);
 
-        Console.WriteLine($"{AuthorRole.Assistant}: {result.RenderedPrompt}");
+        Console.WriteLine($"{AuthorRole.Assistant}: {resultpropmpt}");
 
-        await InvokeAgentAsync(result.RenderedPrompt, cancellationToken: tokenSource.Token);
+        await InvokeAgentAsync(resultpropmpt, cancellationToken: tokenSource.Token);
     }
     catch (Exception ex)
     {
@@ -67,6 +88,8 @@ while (true)
     }
 
 }
+
+
 
 
 Kernel CreateQwenKernel()
@@ -91,7 +114,7 @@ Kernel CreaeOpenKernel()
     var credential = new ApiKeyCredential(githubkey);
     var ghModelsClient = new OpenAIClient(credential, openAiOptions);
     builder.AddOpenAIChatCompletion("gpt-4o", ghModelsClient);
-    builder.Services.AddSingleton<IPromptRenderFilter, PromptFilter>();
+    //  builder.Services.AddSingleton<IPromptRenderFilter, PromptFilter>();
     builder.Plugins.AddFromType<ProductSkill>("ProductSkill");
     builder.Services.AddLogging(services => services.AddConsole().SetMinimumLevel(LogLevel.Trace));
 
@@ -166,12 +189,14 @@ async Task InvokeAgentAsync(string message, bool IsStream = true, CancellationTo
 
 
 
+
     if (agent is { })
     {
 
 
         // message = result?.RenderedPrompt;
         var messagePrompt = new ChatMessageContent(AuthorRole.User, message);
+        Console.WriteLine($"{AuthorRole.Assistant}: {messagePrompt}:{agent.Name}");
         Console.Write($"{AuthorRole.System}: ");
 
         List<ChatMessageContent> chatMessageContents = new List<ChatMessageContent>()

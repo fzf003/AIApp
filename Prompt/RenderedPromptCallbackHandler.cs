@@ -1,0 +1,1 @@
+public delegate Task<string> RenderedPromptCallbackHandler(string originalPrompt,CancellationToken cancellationToken = default);
