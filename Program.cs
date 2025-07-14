@@ -1,5 +1,4 @@
-﻿// See https://aka.ms/new-console-template for more information
-using Azure;
+﻿using Azure;
 using Json.Schema.Generation.Intents;
 using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,10 +13,10 @@ using System.ClientModel;
 using System.Text;
 
 
-var qwenApiKey = "<key>";
-var githubkey = "<key>"; // 替换为你的GitHub密钥
+var qwenApiKey = "<key>"; // 替换为你的Qwen API Key
+var githubkey = "<key>";// 替换为你的Github API Key
 var modelId = "qwen-plus";
-var qwenEndpoint = "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions";
+//var qwenEndpoint = "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions";
 
 var qwenkernel = CreateQwenKernel();
 

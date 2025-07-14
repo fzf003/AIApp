@@ -1,12 +1,10 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="Microsoft.SemanticKernel" Version="1.60.0" />
     <PackageReference Include="Cnblogs.SemanticKernel.Connectors.DashScope" Version="0.6.2" />
@@ -14,5 +12,4 @@
     <PackageReference Include="Microsoft.SemanticKernel.Agents.OpenAI" Version="1.60.0-preview" />
     <PackageReference Include="Microsoft.SemanticKernel.Connectors.OpenAI" Version="1.60.0" />
   </ItemGroup>
-
 </Project>
