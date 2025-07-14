@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.SemanticKernel" Version="1.58.0" />
+    <PackageReference Include="Microsoft.SemanticKernel" Version="1.60.0" />
     <PackageReference Include="Cnblogs.SemanticKernel.Connectors.DashScope" Version="0.6.2" />
     <PackageReference Include="Microsoft.SemanticKernel.Agents.Core" Version="1.60.0" />
     <PackageReference Include="Microsoft.SemanticKernel.Agents.OpenAI" Version="1.60.0-preview" />
